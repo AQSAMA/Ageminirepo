@@ -57,7 +57,7 @@
 <body>
 <canvas id="glcanvas"></canvas>
 <div id="hud"></div>
-<div id="info">Rotate: drag • Roll: Shift+drag or Q/E • Zoom: wheel/pinch • Reset: double-tap</div>
+<div id="info">Pitch/Roll only: drag (vertical look, horizontal tilt) • Fine roll: Shift+drag or Q/E • Zoom: wheel/pinch • Reset: double-tap</div>
 <script>
 (function () {
   const canvas = document.getElementById('glcanvas');
@@ -385,6 +385,7 @@
   const PITCH_LIMIT = Math.PI / 2 - 0.05;
 
   function clampCamera() {
+    camera.yaw = 0.9;
     camera.distance = clamp(camera.distance, CAMERA_DISTANCE_MIN, CAMERA_DISTANCE_MAX);
     camera.pitch = clamp(camera.pitch, -PITCH_LIMIT, PITCH_LIMIT);
     if (camera.roll > Math.PI) {
@@ -468,11 +469,12 @@
       pointerState.lastPrimary.x = event.clientX;
       pointerState.lastPrimary.y = event.clientY;
       if (pointerState.mode === 'rotate') {
-        camera.yaw -= dx * 0.0045;
+        camera.roll += dx * 0.0045;
         camera.pitch -= dy * 0.0045;
         clampCamera();
       } else if (pointerState.mode === 'roll') {
         camera.roll += dx * 0.01;
+        clampCamera();
       }
     }
   });
@@ -565,9 +567,6 @@
     const maxSteps = Math.min(260.0, 70.0 + diffGrowth * 14.0 + passes * 6.0);
     const fractalIterations = Math.min(16.0, 6.0 + diffGrowth * 0.45 + passes * 0.2);
 
-    if (!userInteracting) {
-      camera.yaw += 0.00035;
-    }
     clampCamera();
     updateCamera();
 
