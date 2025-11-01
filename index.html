@@ -554,12 +554,18 @@
 
   const startTime = performance.now();
   let frameCount = 0;
+  let lastFrameTime = startTime;
+  let fps = 0;
 
   function render(now) {
     if (typeof now !== "number") {
       now = performance.now();
     }
     const elapsed = (now - startTime) * 0.001;
+    const delta = (now - lastFrameTime) * 0.001;
+    const currentFPS = delta > 1e-6 ? 1 / delta : 0;
+    fps = frameCount === 0 ? currentFPS : fps * 0.9 + currentFPS * 0.1;
+    lastFrameTime = now;
     resizeCanvas();
 
     const difficulty = 1.0 + elapsed * 0.12;
@@ -592,7 +598,7 @@
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
 
-    hud.innerHTML = `Elapsed: ${elapsed.toFixed(1)}s<br>Frames: ${frameCount}<br>Difficulty: ${difficulty.toFixed(2)}<br>Passes: ${passes}<br>Ray Step: ${rayStep.toFixed(3)}`;
+    hud.innerHTML = `Elapsed: ${elapsed.toFixed(1)}s<br>FPS: ${fps.toFixed(1)}<br>Frames: ${frameCount}<br>Difficulty: ${difficulty.toFixed(2)}<br>Passes: ${passes}<br>Ray Step: ${rayStep.toFixed(3)}`;
 
     frameCount += 1;
     requestAnimationFrame(render);
