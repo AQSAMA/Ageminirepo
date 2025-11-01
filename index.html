@@ -300,11 +300,13 @@
   gl.disable(gl.DEPTH_TEST);
   gl.disable(gl.CULL_FACE);
 
+  const CAMERA_DISTANCE_INITIAL = 5.0;
+
   const camera = {
     yaw: 0.9,
     pitch: 0.35,
     roll: 0.0,
-    distance: 5.0,
+    distance: CAMERA_DISTANCE_INITIAL,
   };
 
   const cameraMatrix = new Float32Array(9);
@@ -381,7 +383,7 @@
   }
 
   const CAMERA_DISTANCE_MIN = 2.0;
-  const CAMERA_DISTANCE_MAX = 18.0;
+  const CAMERA_DISTANCE_MAX = CAMERA_DISTANCE_INITIAL;
   const PITCH_LIMIT = Math.PI / 2 - 0.05;
 
   function clampCamera() {
@@ -510,7 +512,7 @@
       camera.yaw = 0.9;
       camera.pitch = 0.35;
       camera.roll = 0.0;
-      camera.distance = 5.0;
+      camera.distance = CAMERA_DISTANCE_INITIAL;
       clampCamera();
     }
     lastTapTime = now;
@@ -532,7 +534,7 @@
       camera.yaw = 0.9;
       camera.pitch = 0.35;
       camera.roll = 0.0;
-      camera.distance = 5.0;
+      camera.distance = CAMERA_DISTANCE_INITIAL;
       clampCamera();
     }
   });
